@@ -1,10 +1,13 @@
 cmake_minimum_required(VERSION 3.26)
 project(clipnote)
+
+set(CMAKE_CXX_STANDARD 23)
+
 add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
 SET(GLFW_PATH ${CMAKE_CURRENT_SOURCE_DIR}/include/GLFW/glfw-3.3.8.zip)
-SET(ImgUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/imgui-1.89.8)
+SET(ImgUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/imgui-docking)
 SET(ImgUI_BACKENDS_DIR ${ImgUI_DIR}/backends)
 SET(IMGUI_FILES
         ${ImgUI_DIR}/imgui.cpp
@@ -12,7 +15,9 @@ SET(IMGUI_FILES
         ${ImgUI_DIR}/imgui_tables.cpp
         ${ImgUI_DIR}/imgui_widgets.cpp
         ${ImgUI_BACKENDS_DIR}/imgui_impl_glfw.cpp # platform
-        ${ImgUI_BACKENDS_DIR}/imgui_impl_opengl3.cpp # render
+        ${ImgUI_BACKENDS_DIR}/imgui_impl_opengl3.cpp
+        src/win/HotKey.cpp # render
+        src/win/InputUtil.cpp # render
 )
 
 include_directories(
