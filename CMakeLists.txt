@@ -16,8 +16,6 @@ SET(IMGUI_FILES
         ${ImgUI_DIR}/imgui_widgets.cpp
         ${ImgUI_BACKENDS_DIR}/imgui_impl_glfw.cpp # platform
         ${ImgUI_BACKENDS_DIR}/imgui_impl_opengl3.cpp
-        src/win/HotKey.cpp # render
-        src/win/InputUtil.cpp # render
 )
 
 include_directories(

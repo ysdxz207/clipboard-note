@@ -6,9 +6,7 @@
 #include "imgui_internal.h"
 
 #include <GLFW/glfw3.h> // Will drag system OpenGL headers
-#include <winuser.h>
-#include "InputUtil.h" // including custom hotkey files
-#include "Hotkey.h" // including custom hotkey files
+#include <windows.h>
 
 bool show_main_window = true;
 
@@ -46,13 +44,20 @@ int main(int, char**)
     // 关掉主窗体（step 2）
     io.ConfigViewportsNoAutoMerge = true;
 
-    KeyBindToggle activate_bind = KeyBindToggle(KeyBind::KeyCode::INSERT);
 
     io.Fonts->AddFontFromFileTTF("c:/windows/fonts/simhei.ttf", 13.0f, NULL, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
 
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
+
+    if (RegisterHotKey(NULL, 1, MOD_ALT,
+                   0x42))
+    {
+
+    }
+
+
 
 
 
@@ -79,9 +84,6 @@ ImGui::SetNextWindowSize(viewport->ImGuiViewport::WorkSize);
 //        ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
 //#endif
 
-// in main gui while to check hotkeys
-if (GetKeyState(activate_bind.toInt()) & 0x8000) { showOrHideMainWindow(); }
-
 
 if (show_main_window)
 {
@@ -91,8 +93,6 @@ if (show_main_window)
         ImGui::Begin("clipboard-note", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysUseWindowPadding);
         ImGui::PopStyleVar();
 
-    // in main gui     ("label", variable_keybind, margin)
-    ImGuiCustom::hotkey("Keybind:", activate_bind, 100.0f);
 
         ImGui::BeginChild("header", ImVec2(0.0f, 60.0f), true);
         ImGui::Text("我是头部");
@@ -135,6 +135,18 @@ if (show_main_window)
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(window);
+
+
+        // 热键
+        MSG msg;
+        if (GetMessage(&msg, NULL, 0, 0))
+        {
+            if (msg.message == WM_HOTKEY)
+            {
+                wprintf(L"WM_HOTKEY received\n");
+                showOrHideMainWindow();
+            }
+        }
     }
 
     // Cleanup
